@@ -679,6 +679,9 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     case MAVLINK_MSG_ID_VFR_HUD:
         _handleVfrHud(message);
         break;
+    case MAVLINK_MSG_ID_SHT31_OUTPUT_STATUS:
+         _handleSht31(message);
+         break;
     case MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED:
         _handleCameraImageCaptured(message);
         break;
@@ -929,6 +932,15 @@ void Vehicle::_handleVfrHud(mavlink_message_t& message)
     _groundSpeedFact.setRawValue(qIsNaN(vfrHud.groundspeed) ? 0 : vfrHud.groundspeed);
     _climbRateFact.setRawValue(qIsNaN(vfrHud.climb) ? 0 : vfrHud.climb);
     _throttlePctFact.setRawValue(static_cast<int16_t>(vfrHud.throttle));
+}
+
+void Vehicle::_handleSht31(mavlink_message_t& message)
+{
+mavlink_sht31_output_status_t sht31;
+mavlink_msg_sht31_output_status_decode(&message, &sht31);
+
+_sht31TempFact.setRawValue(qIsNaN(sht31.sht31_temp) ? 0 : sht31.sht31_temp);
+_sht31HumiFact.setRawValue(qIsNaN(sht31.sht31_humidity) ? 0 : sht31.sht31_humidity);
 }
 
 // Ignore warnings from mavlink headers for both GCC/Clang and MSVC
