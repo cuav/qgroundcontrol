@@ -272,6 +272,8 @@ public:
     Q_PROPERTY(Fact* yawRate            READ yawRate            CONSTANT)
     Q_PROPERTY(Fact* groundSpeed        READ groundSpeed        CONSTANT)
     Q_PROPERTY(Fact* airSpeed           READ airSpeed           CONSTANT)
+    Q_PROPERTY(Fact* sht31Temp          READ sht31Temp          CONSTANT)
+    Q_PROPERTY(Fact* sht31Humi          READ sht31Humi          CONSTANT)
     Q_PROPERTY(Fact* airSpeedSetpoint   READ airSpeedSetpoint   CONSTANT)
     Q_PROPERTY(Fact* climbRate          READ climbRate          CONSTANT)
     Q_PROPERTY(Fact* altitudeRelative   READ altitudeRelative   CONSTANT)
@@ -367,7 +369,6 @@ public:
 
     /// Alter the current mission item on the vehicle
     Q_INVOKABLE void setCurrentMissionSequence(int seq);
-
     /// Reboot vehicle
     Q_INVOKABLE void rebootVehicle();
 
@@ -608,6 +609,8 @@ public:
     Fact* pitchRate                         () { return &_pitchRateFact; }
     Fact* yawRate                           () { return &_yawRateFact; }
     Fact* airSpeed                          () { return &_airSpeedFact; }
+    Fact* sht31Temp                         () { return &_sht31TempFact; }
+    Fact* sht31Humi                         () { return &_sht31HumiFact; }
     Fact* airSpeedSetpoint                  () { return &_airSpeedSetpointFact; }
     Fact* groundSpeed                       () { return &_groundSpeedFact; }
     Fact* climbRate                         () { return &_climbRateFact; }
@@ -938,6 +941,7 @@ private:
     void _handleGlobalPositionInt       (mavlink_message_t& message);
     void _handleAltitude                (mavlink_message_t& message);
     void _handleVfrHud                  (mavlink_message_t& message);
+    void _handleSht31                   (mavlink_message_t& message);
     void _handleNavControllerOutput     (mavlink_message_t& message);
     void _handleHighLatency             (mavlink_message_t& message);
     void _handleHighLatency2            (mavlink_message_t& message);
@@ -1233,6 +1237,8 @@ private:
     Fact _distanceToGCSFact;
     Fact _hobbsFact;
     Fact _throttlePctFact;
+    Fact _sht31TempFact;
+    Fact _sht31HumiFact;
 
     VehicleGPSFactGroup             _gpsFactGroup;
     VehicleGPS2FactGroup            _gps2FactGroup;
@@ -1295,6 +1301,9 @@ private:
     static const char* _escStatusFactGroupName;
     static const char* _estimatorStatusFactGroupName;
     static const char* _terrainFactGroupName;
+
+    static const char* _sht31TempFactName;
+    static const char* _sht31HumiFactName;
 
     static const int _vehicleUIUpdateRateMSecs      = 100;
 

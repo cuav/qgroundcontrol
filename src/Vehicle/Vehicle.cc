@@ -699,6 +699,9 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     case MAVLINK_MSG_ID_VFR_HUD:
         _handleVfrHud(message);
         break;
+    case MAVLINK_MSG_ID_SHT31_OUTPUT_STATUS:
+        _handleSht31(message);
+        break;
     case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
         _handleNavControllerOutput(message);
         break;
@@ -938,6 +941,15 @@ void Vehicle::_handleStatusText(mavlink_message_t& message)
         _chunkedStatusTextTimer.stop();
         _chunkedStatusTextCompleted(message.compid);
     }
+}
+
+void Vehicle::_handleSht31(mavlink_message_t& message)
+{
+mavlink_sht31_output_status_t sht31;
+mavlink_msg_sht31_output_status_decode(&message, &sht31);
+
+_sht31TempFact.setRawValue(qIsNaN(sht31.sht31_temp) ? 0 : sht31.sht31_temp);
+_sht31HumiFact.setRawValue(qIsNaN(sht31.sht31_humidity) ? 0 : sht31.sht31_humidity);
 }
 
 void Vehicle::_handleVfrHud(mavlink_message_t& message)
