@@ -703,6 +703,9 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     case MAVLINK_MSG_ID_VFR_HUD:
         _handleVfrHud(message);
         break;
+    case MAVLINK_MSG_ID_ATMOSPHERE_OUTPUT_STATUS:
+        _handleAtmos(message);
+        break;
     case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
         _handleNavControllerOutput(message);
         break;
@@ -957,6 +960,15 @@ void Vehicle::_handleVfrHud(mavlink_message_t& message)
         _altitudeTuningOffset = vfrHud.alt;
     }
     _altitudeTuningFact.setRawValue(vfrHud.alt - _altitudeTuningOffset);
+}
+
+void Vehicle::_handleAtmos(mavlink_message_t& message)
+{
+    mavlink_atmosphere_output_status_t atmos;
+    mavlink_msg_atmosphere_output_status_decode(&message, &atmos);
+
+    _atmosTempFact.setRawValue(qIsNaN(atmos.atmosphere_temp) ? 0 : atmos.atmosphere_temp);
+    _atmosHumiFact.setRawValue(qIsNaN(atmos.atmosphere_humidity) ? 0 : atmos.atmosphere_humidity);
 }
 
 void Vehicle::_handleNavControllerOutput(mavlink_message_t& message)
