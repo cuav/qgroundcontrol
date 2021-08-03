@@ -288,6 +288,8 @@ public:
     Q_PROPERTY(Fact* distanceToGCS      READ distanceToGCS      CONSTANT)
     Q_PROPERTY(Fact* hobbs              READ hobbs              CONSTANT)
     Q_PROPERTY(Fact* throttlePct        READ throttlePct        CONSTANT)
+    Q_PROPERTY(Fact* atmosTemp          READ atmosTemp           CONSTANT)
+    Q_PROPERTY(Fact* atmosHumi          READ atmosHumi           CONSTANT)
 
     Q_PROPERTY(FactGroup*           gps             READ gpsFactGroup               CONSTANT)
     Q_PROPERTY(FactGroup*           gps2            READ gps2FactGroup              CONSTANT)
@@ -626,6 +628,8 @@ public:
     Fact* distanceToGCS                     () { return &_distanceToGCSFact; }
     Fact* hobbs                             () { return &_hobbsFact; }
     Fact* throttlePct                       () { return &_throttlePctFact; }
+    Fact* atmosTemp                          () { return &_atmosTempFact; }
+    Fact* atmosHumi                          () { return &_atmosHumiFact; }
 
     FactGroup* gpsFactGroup                 () { return &_gpsFactGroup; }
     FactGroup* gps2FactGroup                () { return &_gps2FactGroup; }
@@ -945,6 +949,7 @@ private:
     void _handleGlobalPositionInt       (mavlink_message_t& message);
     void _handleAltitude                (mavlink_message_t& message);
     void _handleVfrHud                  (mavlink_message_t& message);
+    void _handleAtmos                   (mavlink_message_t& message);
     void _handleNavControllerOutput     (mavlink_message_t& message);
     void _handleHighLatency             (mavlink_message_t& message);
     void _handleHighLatency2            (mavlink_message_t& message);
@@ -1243,6 +1248,8 @@ private:
     Fact _distanceToGCSFact;
     Fact _hobbsFact;
     Fact _throttlePctFact;
+    Fact _atmosTempFact;
+    Fact _atmosHumiFact;
 
     VehicleGPSFactGroup             _gpsFactGroup;
     VehicleGPS2FactGroup            _gps2FactGroup;
@@ -1291,6 +1298,8 @@ private:
     static const char* _distanceToGCSFactName;
     static const char* _hobbsFactName;
     static const char* _throttlePctFactName;
+    static const char* _atmosTempFactName;
+    static const char* _atmosHumiFactName;
 
     static const char* _gpsFactGroupName;
     static const char* _gps2FactGroupName;
