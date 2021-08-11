@@ -298,6 +298,10 @@ public:
     Q_PROPERTY(Fact* distanceToGCS      READ distanceToGCS      CONSTANT)
     Q_PROPERTY(Fact* hobbs              READ hobbs              CONSTANT)
     Q_PROPERTY(Fact* throttlePct        READ throttlePct        CONSTANT)
+    Q_PROPERTY(Fact* hygroID            READ hygroID            CONSTANT)
+    Q_PROPERTY(Fact* hygroTemp          READ hygroTemp          CONSTANT)
+    Q_PROPERTY(Fact* hygroHumi          READ hygroHumi          CONSTANT)
+
 
     Q_PROPERTY(FactGroup*           gps             READ gpsFactGroup               CONSTANT)
     Q_PROPERTY(FactGroup*           gps2            READ gps2FactGroup              CONSTANT)
@@ -638,6 +642,9 @@ public:
     Fact* distanceToGCS                     () { return &_distanceToGCSFact; }
     Fact* hobbs                             () { return &_hobbsFact; }
     Fact* throttlePct                       () { return &_throttlePctFact; }
+    Fact* hygroID                          () { return &_hygroIDFact; }
+    Fact* hygroTemp                          () { return &_hygroTempFact; }
+    Fact* hygroHumi                          () { return &_hygroHumiFact; }
 
     FactGroup* gpsFactGroup                 () { return &_gpsFactGroup; }
     FactGroup* gps2FactGroup                () { return &_gps2FactGroup; }
@@ -967,6 +974,7 @@ private:
     void _handleAttitude                (mavlink_message_t& message);
     void _handleAttitudeQuaternion      (mavlink_message_t& message);
     void _handleStatusText              (mavlink_message_t& message);
+    void _handleHygro                   (mavlink_message_t& message);
     void _handleOrbitExecutionStatus    (const mavlink_message_t& message);
     void _handleGimbalOrientation       (const mavlink_message_t& message);
     void _handleObstacleDistance        (const mavlink_message_t& message);
@@ -1264,6 +1272,10 @@ private:
     Fact _distanceToGCSFact;
     Fact _hobbsFact;
     Fact _throttlePctFact;
+    Fact _hygroIDFact;
+    Fact _hygroTempFact;
+    Fact _hygroHumiFact;
+
 
     VehicleGPSFactGroup             _gpsFactGroup;
     VehicleGPS2FactGroup            _gps2FactGroup;
@@ -1328,6 +1340,9 @@ private:
     static const char* _escStatusFactGroupName;
     static const char* _estimatorStatusFactGroupName;
     static const char* _terrainFactGroupName;
+    static const char* _hygroIDFactName;
+    static const char* _hygroTempFactName;
+    static const char* _hygroHumiFactName;
 
     static const int _vehicleUIUpdateRateMSecs      = 100;
 
