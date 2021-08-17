@@ -711,6 +711,9 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     case MAVLINK_MSG_ID_VFR_HUD:
         _handleVfrHud(message);
         break;
+    case MAVLINK_MSG_ID_HYGROMETER_SENSOR:
+        _handleHygrometerSensor(message);
+        break;
     case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:
         _handleNavControllerOutput(message);
         break;
@@ -987,6 +990,16 @@ void Vehicle::_handleNavControllerOutput(mavlink_message_t& message)
     _altitudeTuningSetpointFact.setRawValue(_altitudeTuningFact.rawValue().toDouble() - navControllerOutput.alt_error);
     _xTrackErrorFact.setRawValue(_altitudeTuningFact.rawValue().toDouble() - navControllerOutput.xtrack_error);
     _airSpeedSetpointFact.setRawValue(_airSpeedFact.rawValue().toDouble() - navControllerOutput.aspd_error);
+}
+
+void Vehicle::_handleHygrometerSensor(mavlink_message_t& message)
+{
+    mavlink_hygrometer_sensor_t hygrometer;
+    mavlink_msg_hygrometer_sensor_decode(&message, &hygrometer);
+
+    _hygroIDFact.setRawValue(hygrometer.id);
+    _hygroTempFact.setRawValue(hygrometer.temperature);
+    _hygroHumiFact.setRawValue(hygrometer.humidity);
 }
 
 // Ignore warnings from mavlink headers for both GCC/Clang and MSVC
